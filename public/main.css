@@ -1,0 +1,100 @@
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #96f0aa;
+    font-family: Lato, HelveticaNeue, "Helvetica Neue", Helvetica, Arial,
+        sans-serif;
+}
+
+header {
+    width: 80%;
+    text-align: center;
+}
+
+main {
+    width: min(80%, 950px);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.description {
+    font-size: 2rem;
+}
+
+#file-container {
+    --radius: 10px;
+    --header-height: min(44px, 50%);
+    width: 100%;
+    height: 75%;
+    background-color: #faf0e6;
+    border: 2px rgba(129, 77, 24, 0.5) solid;
+    border-radius: var(--radius);
+    z-index: 0;
+    position: relative;
+    isolation: isolate;
+}
+
+#file-container::before {
+    content: "File List";
+    font-size: 2rem;
+    text-align: center;
+    width: 100%;
+    height: var(--header-height);
+    background: linear-gradient(#faf0e6, #f6e3d0);
+    border-bottom: 1px solid rgba(129, 77, 24, 0.2);
+    border-radius: var(--radius) var(--radius) 0px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 0;
+    position: relative;
+}
+
+#file-container[data-files="0"]::after,
+#file-container[data-hover="true"]::after {
+    content: "Add or Drop Files Here";
+    color: rgba(86, 51, 16, 0.6);
+    font-size: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    inset: var(--header-height) 0 0 0;
+    z-index: -1;
+}
+
+#file-container[data-hover="true"]::after {
+    content: "Drop Files Here";
+    background: #fff2e080;
+    border: 8px dashed #c8b6ac;
+    color: #c8b6ac;
+    font-size: 370%;
+}
+
+#file-container > #file_copy {
+    display: none;
+}
+
+#file-container[data-files="0"] > #file_copy {
+    display: flex;
+    color: rgba(86, 51, 16, 0.6);
+    font-size: 5rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, calc(-50% - 3rem));
+    z-index: -1;
+}
+
+#file-container[data-hover="true"] > #file_copy {
+    display: none;
+}
