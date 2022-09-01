@@ -1,7 +1,16 @@
 $(document).ready(() => {
-    addToList("File 1");
-    addToList("File 2");
-    addToList("File 3");
+    const picker = $("#file_upload");
+    const ListContainer = $("#file-container");
+
+    ListContainer.on("click", (e) => {
+        if (e.target == ListContainer[0]) {
+            picker.click();
+        }
+    });
+    picker.on("change", (e) => {
+        let filename = picker.val().replace(/.*(\/|\\)/, "");
+        addToList(filename);
+    });
 });
 
 function setupListItemEvent(fileDom) {
