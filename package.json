@@ -1,0 +1,24 @@
+{
+  "name": "xopp-merger-app",
+  "version": "1.0.0",
+  "description": "A web app to merge multiple xopp files.",
+  "main": "index.mjs",
+  "scripts": {
+    "start": "node index.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MrPancakes39/xopp-merger-app.git"
+  },
+  "keywords": [
+    "Xournal++",
+    "xopp",
+    "web-app"
+  ],
+  "author": "Salman Hasan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MrPancakes39/xopp-merger-app/issues"
+  },
+  "homepage": "https://github.com/MrPancakes39/xopp-merger-app#readme"
+}
