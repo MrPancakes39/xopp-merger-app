@@ -117,6 +117,12 @@ main {
     display: none;
 }
 
+.no-select {
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+}
+
 #file-container > .file > .reorder,
 #file-container > .file > .remove {
     width: 38px;
@@ -126,14 +132,14 @@ main {
     align-items: center;
     justify-content: center;
     font-size: 3rem;
-    color: var(--dark-color);
 }
 
 #file-container > .file > .reorder {
     content: "\e5d2";
     font-family: "Material Symbols Outlined";
+    color: var(--dark-color);
     background: var(--medium-color);
-    margin-right: 5px;
+    margin-right: 10px;
     cursor: move;
 }
 
@@ -153,4 +159,19 @@ main {
     display: flex;
     flex-direction: row;
     flex-grow: 1;
+}
+
+#file-container > .file[data-hold="true"] {
+    border: 2px solid var(--dark-color);
+    border-right-width: 0px;
+    border-left-width: 0px;
+}
+
+#file-container > .file[data-hold="true"] > .reorder {
+    color: #d7c7b7;
+    background: var(--dark-color);
+}
+
+#file-container > .file[data-hold="true"] > .remove {
+    border-right: 2px solid var(--dark-color);
 }
