@@ -3,12 +3,22 @@ $(document).ready(() => {
 });
 
 function setupFileListEvents() {
+    let container = $("#file-container");
     let fileDomList = document.querySelectorAll("#file-container > .file");
+    container.attr("data-files", fileDomList.length);
     let h = 44;
-    let topY = $("#file-container").position().top + h;
+    let topY = container.position().top + h;
     fileDomList.forEach((fileDom) => {
         // convert element to jquery element
         let fileElt = $(fileDom);
+
+        // if we hit on the remove button
+        fileElt.find(".remove").on("click", () => {
+            fileElt.slideUp("", () => {
+                fileElt.remove();
+                container.attr("data-files", container.attr("data-files") - 1);
+            });
+        });
 
         // if we drag from the reorder div
         fileElt.find(".reorder").on("mousedown", (e) => {
