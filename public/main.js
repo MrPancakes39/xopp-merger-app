@@ -1,18 +1,22 @@
 $(document).ready(() => {
-    const picker = $("#file_upload");
-    const ListContainer = $("#file-container");
+    // const picker = $("#file_upload");
+    // const ListContainer = $("#file-container");
 
-    ListContainer.on("click", (e) => {
-        if (e.target == ListContainer[0]) {
-            picker.click();
-        }
-    });
-    picker.on("change", (e) => {
-        let files = picker[0].files;
-        for (let i = 0; i < files.length; i++) {
-            addToList(files[i].name);
-        }
-    });
+    // ListContainer.on("click", (e) => {
+    //     if (e.target == ListContainer[0]) {
+    //         picker.click();
+    //     }
+    // });
+    // picker.on("change", (e) => {
+    //     let files = picker[0].files;
+    //     for (let i = 0; i < files.length; i++) {
+    //         addToList(files[i].name);
+    //     }
+    // });
+
+    for (let i = 1; i <= 10; i++) {
+        addToList(`File ${i}`);
+    }
 });
 
 function setupListItemEvent(fileDom) {
@@ -39,6 +43,7 @@ function setupListItemEvent(fileDom) {
     fileElt.find(".reorder").on("mousedown", (e) => {
         // get current pos
         let pos = fileElt.position();
+        console.log({ top: pos.top });
 
         // change element styling for now
         fileElt.css("position", "absolute");
@@ -55,29 +60,32 @@ function setupListItemEvent(fileDom) {
 
         // when we move our mouse
         $(document).on("mousemove", (e) => {
-            // we check if the currentY clamp it to ceiling of the div
+            // get current y pos
             let currentY = e.clientY;
-            currentY = currentY < topY ? topY : currentY;
             // we get the differnce in y position when moved
             let deltaY = currentY - prevY;
-            prevY = currentY;
             // calculate nextY position of the div.file
             let nextY = fileElt.position().top + deltaY;
+            // if div.file is in hitting the header then clamp it
+            nextY = nextY < h / 2 ? h / 2 : nextY;
+            // if our mouse goes above the header then clamp it
+            prevY = currentY < topY ? topY : currentY;
+            console.log({ prevY, topY, currentY, deltaY });
             // if we need to move it down
-            if (nextY > pos.top + h / 2) {
-                let nextElt = fake.next(".file");
-                if (nextElt.length) {
-                    pos = nextElt.position();
-                    nextElt.insertBefore(fake);
-                }
-                // or we need to move it up
-            } else if (nextY < pos.top - h / 2) {
-                let prevElt = fake.prev(".file");
-                if (prevElt.length) {
-                    pos = prevElt.position();
-                    fake.insertBefore(prevElt);
-                }
-            }
+            // if (nextY > pos.top + h / 2) {
+            //     let nextElt = fake.next(".file");
+            //     if (nextElt.length) {
+            //         pos = nextElt.position();
+            //         nextElt.insertBefore(fake);
+            //     }
+            //     // or we need to move it up
+            // } else if (nextY < pos.top - h / 2) {
+            //     let prevElt = fake.prev(".file");
+            //     if (prevElt.length) {
+            //         pos = prevElt.position();
+            //         fake.insertBefore(prevElt);
+            //     }
+            // }
             // and move it
             fileElt.css("top", `${nextY}px`);
         });
