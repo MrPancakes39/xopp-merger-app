@@ -24,6 +24,7 @@ function setupListItemEvent(fileDom) {
     const container = $("#file-container");
     const h = 44;
     const topY = container.position().top + h;
+    const bottomY = container.height() - 1.25 * h;
 
     // set correct file list
     container.attr("data-files", container.children(".file").length);
@@ -43,7 +44,6 @@ function setupListItemEvent(fileDom) {
     fileElt.find(".reorder").on("mousedown", (e) => {
         // get current pos
         let pos = fileElt.position();
-        console.log({ top: pos.top });
 
         // change element styling for now
         fileElt.css("position", "absolute");
@@ -66,26 +66,27 @@ function setupListItemEvent(fileDom) {
             let deltaY = currentY - prevY;
             // calculate nextY position of the div.file
             let nextY = fileElt.position().top + deltaY;
-            // if div.file is in hitting the header then clamp it
+            // if div.file is hitting the header then clamp it
             nextY = nextY < h / 2 ? h / 2 : nextY;
+            // if div.file is hitting the bottom then clamp it
+            nextY = nextY > bottomY ? bottomY : nextY;
             // if our mouse goes above the header then clamp it
             prevY = currentY < topY ? topY : currentY;
-            console.log({ prevY, topY, currentY, deltaY });
             // if we need to move it down
-            // if (nextY > pos.top + h / 2) {
-            //     let nextElt = fake.next(".file");
-            //     if (nextElt.length) {
-            //         pos = nextElt.position();
-            //         nextElt.insertBefore(fake);
-            //     }
-            //     // or we need to move it up
-            // } else if (nextY < pos.top - h / 2) {
-            //     let prevElt = fake.prev(".file");
-            //     if (prevElt.length) {
-            //         pos = prevElt.position();
-            //         fake.insertBefore(prevElt);
-            //     }
-            // }
+            if (nextY > pos.top + h / 2) {
+                let nextElt = fake.next(".file");
+                if (nextElt.length) {
+                    pos = nextElt.position();
+                    nextElt.insertBefore(fake);
+                }
+                // or we need to move it up
+            } else if (nextY < pos.top - h / 2) {
+                let prevElt = fake.prev(".file");
+                if (prevElt.length) {
+                    pos = prevElt.position();
+                    fake.insertBefore(prevElt);
+                }
+            }
             // and move it
             fileElt.css("top", `${nextY}px`);
         });
