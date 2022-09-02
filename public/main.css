@@ -24,6 +24,7 @@ main {
     height: 100%;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
 .description {
@@ -45,7 +46,7 @@ main {
     z-index: 0;
     position: relative;
     isolation: isolate;
-    overflow: auto !important;
+    overflow: auto;
 }
 
 #file-container::before {
@@ -61,7 +62,8 @@ main {
     align-items: center;
     justify-content: center;
     z-index: 2;
-    position: relative;
+    position: sticky;
+    top: 0;
 }
 
 #file-container[data-files="0"]::after,
