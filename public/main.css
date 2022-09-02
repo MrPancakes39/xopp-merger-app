@@ -118,7 +118,8 @@ main {
     border-bottom: 1px solid var(--bottom-color);
 }
 
-#file-container[data-files="0"] > .file {
+#file-container[data-files="0"] > .file,
+#file-container[data-hover="true"] > .file {
     display: none;
 }
 
