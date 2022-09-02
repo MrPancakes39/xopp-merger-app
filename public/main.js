@@ -14,10 +14,13 @@ $(document).ready(() => {
     //     }
     // });
 
-    for (let i = 1; i <= 10; i++) {
+    for (let i = 1; i <= 20; i++) {
         addToList(`File ${i}`);
     }
 });
+
+const max = (a, b) => (a > b ? a : b);
+const min = (a, b) => (a < b ? a : b);
 
 function setupListItemEvent(fileDom) {
     // initialize constants
@@ -44,6 +47,8 @@ function setupListItemEvent(fileDom) {
     fileElt.find(".reorder").on("mousedown", (e) => {
         // get current pos
         let pos = fileElt.position();
+        // adjust with offset
+        pos.top += container.scrollTop();
 
         // change element styling for now
         fileElt.css("position", "absolute");
@@ -62,31 +67,44 @@ function setupListItemEvent(fileDom) {
         $(document).on("mousemove", (e) => {
             // get current y pos
             let currentY = e.clientY;
+            // get current offset
+            let offset = container.scrollTop();
             // we get the differnce in y position when moved
             let deltaY = currentY - prevY;
             // calculate nextY position of the div.file
-            let nextY = fileElt.position().top + deltaY;
+            let nextY = fileElt.position().top + deltaY + offset;
             // if div.file is hitting the header then clamp it
-            nextY = nextY < h / 2 ? h / 2 : nextY;
+            let header = h / 2 + offset;
+            nextY = max(nextY, header);
             // if div.file is hitting the bottom then clamp it
-            nextY = nextY > bottomY ? bottomY : nextY;
+            let bottom = bottomY + offset;
+            nextY = min(nextY, bottom);
             // if our mouse goes above the header then clamp it
-            prevY = currentY < topY ? topY : currentY;
+            prevY = max(currentY, topY);
+            // console.log({
+            //     offset,
+            //     nextY,
+            //     header: h / 2 + offset,
+            //     bottom: bottomY + offset,
+            //     currentY,
+            //     prevY,
+            //     topY,
+            // });
             // if we need to move it down
-            if (nextY > pos.top + h / 2) {
-                let nextElt = fake.next(".file");
-                if (nextElt.length) {
-                    pos = nextElt.position();
-                    nextElt.insertBefore(fake);
-                }
-                // or we need to move it up
-            } else if (nextY < pos.top - h / 2) {
-                let prevElt = fake.prev(".file");
-                if (prevElt.length) {
-                    pos = prevElt.position();
-                    fake.insertBefore(prevElt);
-                }
-            }
+            // if (nextY > pos.top + h / 2) {
+            //     let nextElt = fake.next(".file");
+            //     if (nextElt.length) {
+            //         pos = nextElt.position();
+            //         nextElt.insertBefore(fake);
+            //     }
+            //     // or we need to move it up
+            // } else if (nextY < pos.top - h / 2) {
+            //     let prevElt = fake.prev(".file");
+            //     if (prevElt.length) {
+            //         pos = prevElt.position();
+            //         fake.insertBefore(prevElt);
+            //     }
+            // }
             // and move it
             fileElt.css("top", `${nextY}px`);
         });
