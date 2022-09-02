@@ -8,8 +8,10 @@ $(document).ready(() => {
         }
     });
     picker.on("change", (e) => {
-        let filename = picker.val().replace(/.*(\/|\\)/, "");
-        addToList(filename);
+        let files = picker[0].files;
+        for (let i = 0; i < files.length; i++) {
+            addToList(files[i].name);
+        }
     });
 });
 
