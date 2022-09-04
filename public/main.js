@@ -1,4 +1,4 @@
-$(document).ready(() => {
+$(window).on("load", () => {
     // const picker = $("#file_upload");
     // const ListContainer = $("#file-container");
 
@@ -82,13 +82,9 @@ function setupListItemEvent(fileDom) {
             // if our mouse goes above the header then clamp it
             prevY = max(currentY, topY);
             // console.log({
-            //     offset,
-            //     nextY,
-            //     header: h / 2 + offset,
-            //     bottom: bottomY + offset,
-            //     currentY,
-            //     prevY,
             //     topY,
+            //     fileTop: fileElt.position().top,
+            //     currentY,
             // });
             // if we need to move it down
             // if (nextY > pos.top + h / 2) {
