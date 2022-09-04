@@ -14,9 +14,9 @@ $(window).on("load", () => {
     //     }
     // });
 
-    // for (let i = 1; i <= 20; i++) {
-    //     addToList(`File ${i}`);
-    // }
+    for (let i = 1; i <= 10; i++) {
+        addToList(`File ${i}`);
+    }
 });
 
 const max = (a, b) => (a > b ? a : b);
@@ -81,11 +81,10 @@ function setupListItemEvent(fileDom) {
             nextY = min(nextY, bottom);
             // if our mouse goes above the header then clamp it
             prevY = max(currentY, topY);
-            // console.log({
-            //     topY,
-            //     fileTop: fileElt.position().top,
-            //     currentY,
-            // });
+            // if our mouse goes below the bottom then clamp it
+            let bottomCon = container.height() + container.position().top;
+            prevY = min(prevY, bottomCon - h / 2);
+            console.log({ nextY, prevY, currentY, bottomCon });
             // if we need to move it down
             // if (nextY > pos.top + h / 2) {
             //     let nextElt = fake.next(".file");
