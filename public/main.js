@@ -14,9 +14,9 @@ $(window).on("load", () => {
     //     }
     // });
 
-    for (let i = 1; i <= 20; i++) {
-        addToList(`File ${i}`);
-    }
+    // for (let i = 1; i <= 20; i++) {
+    //     addToList(`File ${i}`);
+    // }
 });
 
 const max = (a, b) => (a > b ? a : b);
