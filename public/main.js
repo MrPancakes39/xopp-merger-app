@@ -1,23 +1,28 @@
 $(window).on("load", () => {
-    // const picker = $("#file_upload");
-    // const ListContainer = $("#file-container");
+    const picker = $("#file_upload");
 
-    // ListContainer.on("click", (e) => {
-    //     if (e.target == ListContainer[0]) {
-    //         picker.click();
-    //     }
-    // });
-    // picker.on("change", (e) => {
-    //     let files = picker[0].files;
-    //     for (let i = 0; i < files.length; i++) {
-    //         addToList(files[i].name);
-    //     }
-    // });
+    $("#file_add").on("click", () => picker.click());
 
-    for (let i = 1; i <= 20; i++) {
-        addToList(`File ${i}`);
-    }
+    picker.on("change", (e) => {
+        let files = picker[0].files;
+        for (let i = 0; i < files.length; i++) {
+            addToList(files[i].name);
+        }
+    });
 });
+
+function addToList(name) {
+    // append file to list
+    let fileElt = $(`
+    <div class="file" data-hold="false">
+        <span class="reorder no-select">menu</span>
+        <span class="name">${name.toString()}</span>
+        <span class="remove no-select">close</span>
+    </div>
+    `).insertBefore("#file_copy");
+    // setup events for that item
+    setupListItemEvent(fileElt);
+}
 
 const max = (a, b) => (a > b ? a : b);
 const min = (a, b) => (a < b ? a : b);
@@ -124,17 +129,4 @@ function setupListItemEvent(fileDom) {
             fake.replaceWith(fileElt);
         });
     });
-}
-
-function addToList(name) {
-    // append file to list
-    let fileElt = $(`
-    <div class="file" data-hold="false">
-        <span class="reorder no-select">menu</span>
-        <span class="name">${name.toString()}</span>
-        <span class="remove no-select">close</span>
-    </div>
-    `).insertBefore("#file_copy");
-    // setup events for that item
-    setupListItemEvent(fileElt);
 }
