@@ -14,7 +14,7 @@ $(window).on("load", () => {
     //     }
     // });
 
-    for (let i = 1; i <= 10; i++) {
+    for (let i = 1; i <= 20; i++) {
         addToList(`File ${i}`);
     }
 });
@@ -84,7 +84,6 @@ function setupListItemEvent(fileDom) {
             // if our mouse goes below the bottom then clamp it
             let bottomCon = container.height() + container.position().top;
             prevY = min(prevY, bottomCon - h / 2);
-            console.log({ nextY, prevY, currentY, bottomCon });
             // if we need to move it down
             // if (nextY > pos.top + h / 2) {
             //     let nextElt = fake.next(".file");
@@ -102,6 +101,12 @@ function setupListItemEvent(fileDom) {
             // }
             // and move it
             fileElt.css("top", `${nextY}px`);
+
+            // TODO: Fix scrolling
+            // setup scrolling
+            if (offset >= 0 && (nextY == header || nextY == bottom)) {
+                container.scrollTop(offset + deltaY);
+            }
         });
 
         // when we release the mouse
