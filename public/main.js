@@ -1,5 +1,6 @@
+const fileList = [];
+
 $(window).on("load", () => {
-    const fileList = [];
     const picker = $("#file_upload");
 
     $("#file_add").on("click", () => picker.click());
@@ -8,10 +9,9 @@ $(window).on("load", () => {
         let files = picker[0].files;
         for (let i = 0; i < files.length; i++) {
             let uuid = crypto.randomUUID();
-            addToList(files[i].name, uuid);
             fileList.push({ file: files[i], uuid });
+            addToList(files[i].name, uuid);
         }
-        console.log(fileList);
     });
 });
 
@@ -47,6 +47,13 @@ function setupListItemEvent(fileDom) {
     // if we hit on the remove button
     fileElt.find(".remove").on("click", () => {
         fileElt.slideUp("", () => {
+            let uuid = fileElt.attr("data-uuid");
+            for (let i = 0; i < fileList.length; i++) {
+                if (fileList[i].uuid == uuid) {
+                    fileList.splice(i, 1);
+                    break;
+                }
+            }
             fileElt.remove();
             container.attr("data-files", container.attr("data-files") - 1);
         });
