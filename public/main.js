@@ -84,21 +84,21 @@ function setupListItemEvent(fileDom) {
             // if our mouse goes below the bottom then clamp it
             let bottomCon = container.height() + container.position().top;
             prevY = min(prevY, bottomCon - h / 2);
-            // if we need to move it down
-            // if (nextY > pos.top + h / 2) {
-            //     let nextElt = fake.next(".file");
-            //     if (nextElt.length) {
-            //         pos = nextElt.position();
-            //         nextElt.insertBefore(fake);
-            //     }
-            //     // or we need to move it up
-            // } else if (nextY < pos.top - h / 2) {
-            //     let prevElt = fake.prev(".file");
-            //     if (prevElt.length) {
-            //         pos = prevElt.position();
-            //         fake.insertBefore(prevElt);
-            //     }
-            // }
+            // if we need to swap it down
+            if (nextY > pos.top + offset + h / 2) {
+                let nextElt = fake.next(".file");
+                if (nextElt.length) {
+                    pos = nextElt.position();
+                    nextElt.insertBefore(fake);
+                }
+                // or we need to swap it up
+            } else if (nextY < pos.top + offset - h / 2) {
+                let prevElt = fake.prev(".file");
+                if (prevElt.length) {
+                    pos = prevElt.position();
+                    fake.insertBefore(prevElt);
+                }
+            }
             // and move it
             fileElt.css("top", `${nextY}px`);
 
