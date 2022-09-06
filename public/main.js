@@ -1,4 +1,5 @@
 $(window).on("load", () => {
+    const fileList = [];
     const picker = $("#file_upload");
 
     $("#file_add").on("click", () => picker.click());
@@ -6,15 +7,18 @@ $(window).on("load", () => {
     picker.on("change", (e) => {
         let files = picker[0].files;
         for (let i = 0; i < files.length; i++) {
-            addToList(files[i].name);
+            let uuid = crypto.randomUUID();
+            addToList(files[i].name, uuid);
+            fileList.push({ file: files[i], uuid });
         }
+        console.log(fileList);
     });
 });
 
-function addToList(name) {
+function addToList(name, uuid) {
     // append file to list
     let fileElt = $(`
-    <div class="file" data-hold="false">
+    <div class="file" data-hold="false" data-uuid="${uuid.toString()}">
         <span class="reorder no-select">menu</span>
         <span class="name">${name.toString()}</span>
         <span class="remove no-select">close</span>
