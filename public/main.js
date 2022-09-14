@@ -23,15 +23,16 @@ function addToList(name, uuid) {
     $.attr(container, "data-files", listLen + 1);
 
     // setup events for that item
-    setupListItemEvent(fileElt);
+    setupListEltEvent(fileElt);
 }
 
-function setupListItemEvent(fileElt) {
+function setupListEltEvent(fileElt) {
     const container = $.one("#file-container");
     let placeholder;
+    let prevY, currentY;
 
-    $.on($.find(fileElt, ".reorder"), "pointerdown", (e) => {
-        e.preventDefault();
+    $.on($.find(fileElt, ".reorder"), "pointerdown", (event) => {
+        event.preventDefault();
         $.on(document, "pointermove", onPointermove);
         $.on(document, "pointerup", onPointerup);
         setMoveStyle(fileElt, true);
@@ -40,6 +41,9 @@ function setupListItemEvent(fileElt) {
             `<div id="placeholder" style='width: 100%; height: 50px;'>`
         );
         container.insertBefore(placeholder, fileElt);
+
+        // initial Y position
+        prevY = event.clientY;
     });
 
     function onPointerup() {
@@ -49,7 +53,19 @@ function setupListItemEvent(fileElt) {
         container.replaceChild(fileElt, placeholder);
     }
 
-    function onPointermove() {}
+    function onPointermove(event) {
+        currentY = event.clientY;
+
+        let deltaY = currentY - prevY;
+        prevY = currentY;
+
+        moveElt(fileElt, deltaY);
+    }
+
+    function moveElt(elt, dist) {
+        let eltY = $.pos(elt).top + dist;
+        $.css(elt, "top", `${eltY}px`);
+    }
 
     function setMoveStyle(elt, should) {
         if (should) {
