@@ -28,10 +28,20 @@ function addToList(name, uuid) {
 
 function setupListEltEvent(fileElt) {
     const container = $.one("#file-container");
+    const header = parseInt($.prop(container, "--header-height")); // 44px
+    const fileHeight = parseInt($.css(fileElt, "height")); // 50px
+    const containerHeight = parseInt($.css(container, "height"));
+    const MAX_SPEED = 20;
+    const SCROLL_NUDGE_RATIO = 1 / 3;
     let placeholder;
-    let prevY, currentY;
+    let prevY = 0,
+        currentY = 0;
+    let isDragging = false;
 
     $.on($.find(fileElt, ".reorder"), "pointerdown", (event) => {
+        prevY = event.clientY; // initial Y position
+        isDragging = true;
+
         event.preventDefault();
         $.on(document, "pointermove", onPointermove);
         $.on(document, "pointerup", onPointerup);
@@ -42,11 +52,11 @@ function setupListEltEvent(fileElt) {
         );
         container.insertBefore(placeholder, fileElt);
 
-        // initial Y position
-        prevY = event.clientY;
+        animate(); // for scrolling
     });
 
     function onPointerup() {
+        isDragging = false;
         $.off(document, "pointermove", onPointermove);
         $.off(document, "pointerup", onPointerup);
         setMoveStyle(fileElt, false);
@@ -62,6 +72,36 @@ function setupListEltEvent(fileElt) {
         moveElt(fileElt, deltaY);
     }
 
+    function animate() {
+        const scrollX = container.scrollLeft;
+        const scrollY = container.scrollTop;
+        const fileTop = $.pos(fileElt).top;
+        const scrollHeight =
+            $.pos($.one(".file:last-of-type")).top + fileHeight;
+
+        const pastTop = fileTop - scrollY - (header + 1);
+        const pastBottom =
+            fileTop + fileHeight - (containerHeight + scrollY) - 1;
+
+        const hasTopSlack = scrollY > 0;
+        const hasBottomSlack = scrollY < scrollHeight - containerHeight;
+
+        let scrollDeltaY = 0;
+        const thresh = header / 2;
+        if (pastBottom > thresh && hasBottomSlack) {
+            scrollDeltaY = Math.min(pastBottom * SCROLL_NUDGE_RATIO, MAX_SPEED);
+        } else if (pastTop < -thresh && hasTopSlack) {
+            scrollDeltaY = Math.max(pastTop * SCROLL_NUDGE_RATIO, -MAX_SPEED);
+        }
+
+        if (scrollDeltaY) {
+            container.scrollTo(scrollX, scrollY + scrollDeltaY);
+            moveElt(fileElt, scrollDeltaY / MAX_SPEED);
+        }
+
+        if (isDragging) requestAnimationFrame(animate);
+    }
+
     function moveElt(elt, dist) {
         let eltY = $.pos(elt).top + dist;
         $.css(elt, "top", `${eltY}px`);
@@ -75,7 +115,7 @@ function setupListEltEvent(fileElt) {
             $.css(elt, "left", `${pos.left}px`);
             $.attr(elt, "data-hold", "true");
         } else {
-            $.css(elt, "position", "relative");
+            $.css(elt, "position", "");
             $.css(elt, "top", "");
             $.css(elt, "left", "");
             $.attr(elt, "data-hold", "false");

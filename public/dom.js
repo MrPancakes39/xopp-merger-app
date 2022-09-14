@@ -23,6 +23,7 @@ window.$ = {
         }
         dom.style[attr] = value.toString();
     },
+    prop: (dom, prop) => window.getComputedStyle(dom).getPropertyValue(prop),
     pos: (dom) => {
         return {
             top: dom.offsetTop,
