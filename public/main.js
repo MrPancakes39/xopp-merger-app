@@ -104,6 +104,16 @@ function setupListEltEvent(fileElt) {
 
     function moveElt(elt, dist) {
         let eltY = $.pos(elt).top + dist;
+        let scrollY = container.scrollTop;
+
+        // clamp it to top
+        let maxTop = Math.max(scrollY, header / 2);
+        eltY = Math.max(eltY, maxTop);
+
+        // clamp it to bottom
+        let maxBottom = $.pos($.one(".file:last-of-type")).top + header / 2;
+        eltY = Math.min(eltY, maxBottom);
+
         $.css(elt, "top", `${eltY}px`);
     }
 
