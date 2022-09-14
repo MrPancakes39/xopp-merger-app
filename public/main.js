@@ -23,7 +23,6 @@ window.onload = function () {
 
 function addToList(name, uuid) {
     const container = $.one("#file-container");
-    const ref = $.one("#file-extra");
 
     // Create the file dom and append it to body
     uuid = uuid ?? name;
@@ -34,7 +33,7 @@ function addToList(name, uuid) {
         <span class="remove no-select">close</span>
     </div>
     `);
-    container.insertBefore(fileElt, ref);
+    container.appendChild(fileElt);
 
     // increase number of files
     let listLen = +$.attr(container, "data-files");
