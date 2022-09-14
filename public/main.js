@@ -66,7 +66,7 @@ function setupListEltEvent(fileElt) {
     const fileHeight = parseInt($.css(fileElt, "height")); // 50px
     const containerHeight = parseInt($.css(container, "height"));
     const containerTop = $.pos(container).top;
-    const MAX_SPEED = 20;
+    const MAX_SPEED = 60;
     const SCROLL_NUDGE_RATIO = 1 / 3;
     let placeholder;
     let prevY = 0,
@@ -139,8 +139,9 @@ function setupListEltEvent(fileElt) {
         }
 
         if (scrollDeltaY) {
+            if (Math.sign(scrollDeltaY) == -1) scrollDeltaY *= 2;
             container.scrollTo(scrollX, scrollY + scrollDeltaY);
-            moveElt(fileElt, scrollDeltaY / MAX_SPEED);
+            moveElt(fileElt, scrollDeltaY);
         }
 
         if (isDragging) requestAnimationFrame(animate);
