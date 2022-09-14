@@ -26,27 +26,27 @@ function addToList(name, uuid) {
     setupListItemEvent(fileElt);
 }
 
-function setupListItemEvent(fileDom) {
+function setupListItemEvent(fileElt) {
     const container = $.one("#file-container");
     let placeholder;
 
-    $.on($.find(fileDom, ".reorder"), "pointerdown", (e) => {
+    $.on($.find(fileElt, ".reorder"), "pointerdown", (e) => {
         e.preventDefault();
         $.on(document, "pointermove", onPointermove);
         $.on(document, "pointerup", onPointerup);
-        setMoveStyle(fileDom, true);
+        setMoveStyle(fileElt, true);
 
         placeholder = $.make(
             `<div id="placeholder" style='width: 100%; height: 50px;'>`
         );
-        container.insertBefore(placeholder, fileDom);
+        container.insertBefore(placeholder, fileElt);
     });
 
     function onPointerup() {
         $.off(document, "pointermove", onPointermove);
         $.off(document, "pointerup", onPointerup);
-        setMoveStyle(fileDom, false);
-        container.replaceChild(fileDom, placeholder);
+        setMoveStyle(fileElt, false);
+        container.replaceChild(fileElt, placeholder);
     }
 
     function onPointermove() {}
