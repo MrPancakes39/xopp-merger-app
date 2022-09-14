@@ -113,7 +113,8 @@ function setupListEltEvent(fileElt) {
 
         prevY = currentY;
 
-        moveElt(fileElt, deltaY);
+        let nextY = moveElt(fileElt, deltaY);
+        swapElts(nextY);
     }
 
     function animate() {
@@ -156,10 +157,39 @@ function setupListEltEvent(fileElt) {
         eltY = Math.max(eltY, maxTop);
 
         // clamp it to bottom
-        let maxBottom = $.pos($.one(".file:last-of-type")).top + header / 2;
+        let maxBottom = 0;
+        /*
+         * The clamping is done w.r.t. the last element.
+         * If when swaping we swap with last element this causes a problem.
+         * In that case we get second to last element and use that as reference.
+         */
+        let lastFile = $.one(".file:last-of-type");
+        let noHeld = $.all(`.file[data-hold="false"]`);
+        let lastNotHeld = noHeld[noHeld.length - 1];
+        if (lastFile == lastNotHeld) {
+            maxBottom = $.pos(lastFile).top + header / 2;
+        } else {
+            maxBottom = $.pos(lastNotHeld).top + fileHeight + header / 2;
+        }
         eltY = Math.min(eltY, maxBottom);
 
         $.css(elt, "top", `${eltY}px`);
+        return eltY;
+    }
+
+    function swapElts(eltY) {
+        let orgY = $.pos(placeholder).top;
+        let changeY = eltY - orgY;
+
+        // move placeholder down to next element
+        const thres = header / 2 + fileHeight / 10;
+        if (changeY > thres) {
+            let nextElt = placeholder.nextElementSibling.nextElementSibling;
+            if (nextElt) container.insertBefore(nextElt, placeholder);
+        } else if (changeY < -thres) {
+            let prevElt = placeholder.previousElementSibling;
+            if (prevElt) container.insertBefore(placeholder, prevElt);
+        }
     }
 
     function setMoveStyle(elt, should) {
