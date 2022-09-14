@@ -46,7 +46,8 @@ main {
     z-index: 0;
     position: relative;
     isolation: isolate;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
     scroll-behavior: smooth;
 }
 
@@ -206,4 +207,18 @@ main {
 
 #file-container > .file[data-hold="true"] > .remove {
     border-right: 2px solid var(--dark-color);
+}
+
+@keyframes removing {
+    from {
+        left: 0%;
+    }
+    to {
+        left: 100%;
+    }
+}
+
+#file-container > .file.removing {
+    pointer-events: none;
+    animation: removing 400ms;
 }

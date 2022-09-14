@@ -33,7 +33,7 @@ window.$ = {
 };
 
 window.onload = function () {
-    for (let i = 1; i <= 20; i++) {
+    for (let i = 1; i <= 10; i++) {
         addToList(`File ${i}`);
     }
 };
@@ -209,5 +209,16 @@ function setupListEltEvent(fileElt) {
 
     $.on(container, "wheel", (event) => {
         if ($.attr(fileElt, "data-hold") == "true") event.preventDefault();
+    });
+
+    $.on($.find(fileElt, ".remove"), "click", () => {
+        // play the animation
+        fileElt.classList.add("removing");
+        setTimeout(() => {
+            container.removeChild(fileElt);
+            // decrease number of files
+            let listLen = +$.attr(container, "data-files");
+            $.attr(container, "data-files", listLen - 1);
+        }, 400);
     });
 }
