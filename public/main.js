@@ -206,4 +206,8 @@ function setupListEltEvent(fileElt) {
             $.attr(elt, "data-hold", "false");
         }
     }
+
+    $.on(container, "wheel", (event) => {
+        if ($.attr(fileElt, "data-hold") == "true") event.preventDefault();
+    });
 }
