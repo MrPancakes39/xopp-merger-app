@@ -31,6 +31,7 @@ function setupListEltEvent(fileElt) {
     const header = parseInt($.prop(container, "--header-height")); // 44px
     const fileHeight = parseInt($.css(fileElt, "height")); // 50px
     const containerHeight = parseInt($.css(container, "height"));
+    const containerTop = $.pos(container).top;
     const MAX_SPEED = 20;
     const SCROLL_NUDGE_RATIO = 1 / 3;
     let placeholder;
@@ -67,6 +68,15 @@ function setupListEltEvent(fileElt) {
         currentY = event.clientY;
 
         let deltaY = currentY - prevY;
+
+        // clamp mouse to maxTopY
+        let maxTopY = containerTop + header;
+        currentY = Math.max(currentY, maxTopY);
+
+        // clamp mouse to maxBottomY
+        let maxBottomY = containerTop + containerHeight;
+        currentY = Math.min(currentY, maxBottomY);
+
         prevY = currentY;
 
         moveElt(fileElt, deltaY);
