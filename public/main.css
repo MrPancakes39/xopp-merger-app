@@ -88,11 +88,11 @@ main {
     font-size: 370%;
 }
 
-#file-container > #file_copy {
+#file-container > #file-extra > #file_copy {
     display: none;
 }
 
-#file-container[data-files="0"] > #file_copy {
+#file-container[data-files="0"] > #file-extra > #file_copy {
     display: flex;
     color: var(--dark-color);
     font-size: 5rem;
@@ -103,11 +103,11 @@ main {
     z-index: -1;
 }
 
-#file-container[data-hover="true"] > #file_copy {
+#file-container[data-hover="true"] > #file-extra > #file_copy {
     display: none;
 }
 
-#file-container > #file_add {
+#file-container > #file-extra > #file_add {
     color: rgba(86, 51, 16, 0.8);
     font-size: 3rem;
     font-weight: bold;

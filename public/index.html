@@ -24,7 +24,6 @@
     <link rel="stylesheet" href="./main.css">
 
     <!----- JS ------>
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
     <script src="./main.js"></script>
 </head>
 <body>
@@ -39,9 +38,11 @@
             <br>This web app was made to make merging xopp files possible and simple.
         </p>
         <div id="file-container" data-files="0" data-hover="false">
-            <span id="file_copy" class="material-symbols-outlined">file_copy</span>
-            <div id="file_add" class="material-symbols-outlined no-select">add</div>
-            <input id="file_upload" type="file" style="display: none;" multiple accept=".xopp,*">
+            <div id="file-extra">
+                <span id="file_copy" class="material-symbols-outlined">file_copy</span>
+                <div id="file_add" class="material-symbols-outlined no-select">add</div>
+                <input id="file_upload" type="file" style="display: none;" multiple accept=".xopp,*">
+            </div>
         </div>
     </main>
 </body>
