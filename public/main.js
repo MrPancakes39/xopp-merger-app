@@ -33,7 +33,7 @@ window.$ = {
 };
 
 window.onload = function () {
-    for (let i = 1; i <= 11; i++) {
+    for (let i = 1; i <= 20; i++) {
         addToList(`File ${i}`);
     }
 };
@@ -142,7 +142,8 @@ function setupListEltEvent(fileElt) {
         if (scrollDeltaY) {
             if (Math.sign(scrollDeltaY) == -1) scrollDeltaY *= 2;
             container.scrollTo(scrollX, scrollY + scrollDeltaY);
-            moveElt(fileElt, scrollDeltaY);
+            let nextY = moveElt(fileElt, scrollDeltaY);
+            swapElts(nextY);
         }
 
         if (isDragging) requestAnimationFrame(animate);
