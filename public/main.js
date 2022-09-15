@@ -147,6 +147,7 @@ function setupListEltEvent(fileElt) {
         }
 
         if (isDragging) requestAnimationFrame(animate);
+        else setMoveStyle(fileElt, false);
     }
 
     function moveElt(elt, dist) {
@@ -190,7 +191,10 @@ function setupListEltEvent(fileElt) {
         const thres = header / 2 + fileHeight / 10;
         if (changeY > thres) {
             let nextElt = fileElt.nextElementSibling;
-            if (nextElt) container.insertBefore(nextElt, placeholder);
+            if (nextElt)
+                try {
+                    container.insertBefore(nextElt, placeholder);
+                } catch {}
         } else if (changeY < -thres) {
             let prevElt = placeholder.previousElementSibling;
             if (prevElt) {
