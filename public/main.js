@@ -50,12 +50,36 @@ window.onload = function () {
     $.on(picker, "change", (event) => {
         let { files } = event.target;
         for (let i = 0; i < files.length; i++) {
-            // let uuid = crypto.randomUUID();
-            addToList(files[i].name);
-            FILE_LIST.push(files[i]);
+            let uuid = crypto.randomUUID();
+            addToList(files[i].name, uuid);
+            FILE_LIST.push({ file: files[i], uuid });
         }
     });
 };
+
+function sortList() {
+    let sorted_uuids = Array.from($.all(".file")).map((f) =>
+        $.attr(f, "data-uuid")
+    );
+    // for safety
+    assert(sorted_uuids.length == FILE_LIST.length, {
+        sorted_uuids,
+        FILE_LIST,
+    });
+    // sort the list
+    for (let i = 0; i < FILE_LIST.length; i++) {
+        // if UUID isn't correct
+        if (FILE_LIST[i].uuid != sorted_uuids[i]) {
+            // search for right file
+            for (let j = i + 1; j < FILE_LIST.length; j++) {
+                // and swap it so it becomes in correct place
+                if (FILE_LIST[j].uuid == sorted_uuids[i]) {
+                    [FILE_LIST[i], FILE_LIST[j]] = [FILE_LIST[j], FILE_LIST[i]];
+                }
+            }
+        }
+    }
+}
 
 function addToList(name, uuid) {
     const container = $.one("#file-container");
