@@ -32,10 +32,23 @@ window.$ = {
     },
 };
 
+const FILE_LIST = [];
+
 window.onload = function () {
-    for (let i = 1; i <= 20; i++) {
-        addToList(`File ${i}`);
-    }
+    const picker = $.one("#file_upload");
+
+    $.on($.one("#file_add"), "click", (event) => {
+        picker.click(event);
+    });
+
+    $.on(picker, "change", (event) => {
+        let { files } = event.target;
+        for (let i = 0; i < files.length; i++) {
+            // let uuid = crypto.randomUUID();
+            addToList(files[i].name);
+            FILE_LIST.push(files[i]);
+        }
+    });
 };
 
 function addToList(name, uuid) {
