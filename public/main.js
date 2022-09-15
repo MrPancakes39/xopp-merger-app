@@ -307,3 +307,20 @@ function sortList() {
         }
     }
 }
+
+function getFileName() {
+    let filename = "";
+    const extension = "xopp";
+    let input = $.one("#output-name").value.toString().trim();
+
+    if (!input) return "untitled.xopp";
+
+    if (input.includes(".")) {
+        let arr = input.split(".");
+        let ext = arr.pop();
+        if (ext != extension) filename = input;
+        else filename = arr.join(".");
+    } else filename = input;
+
+    return `${filename}.${extension}`;
+}
