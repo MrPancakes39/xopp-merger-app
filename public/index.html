@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <!-- Metadata --->
     <meta charset="UTF-8">
@@ -16,34 +17,46 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,300,1,0"/>
-    
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,300,1,0" />
+
     <!----- CSS ----->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
     <link rel="stylesheet" href="./main.css">
 
     <!----- JS ------>
     <script src="./main.js"></script>
 </head>
+
 <body>
     <header>
         <h1 style="font-weight: normal;">Xournal++ File Merger</h1>
     </header>
     <main>
         <p class="description">
-            <a href="https://xournalpp.github.io/">Xournal++</a> is an open-source and cross-platform note-taking software that is fast, flexible, and functional.
-            <br>It includes many features and it can be extended via plugins. Xournal++ saves it's notebooks as an xopp file.
+            <a href="https://xournalpp.github.io/">Xournal++</a> is an open-source and cross-platform note-taking
+            software that is fast, flexible, and functional.
+            <br>It includes many features and it can be extended via plugins. Xournal++ saves it's notebooks as an xopp
+            file.
             <br>Currently (2022-09-01) there is no way in the app itself two merge two or more xopp files.
             <br>This web app was made to make merging xopp files possible and simple.
         </p>
-        <div id="file-container" data-files="0" data-hover="false">
-            <div id="file-extra">
-                <span id="file_copy" class="material-symbols-outlined">file_copy</span>
-                <div id="file_add" class="material-symbols-outlined no-select">add</div>
-                <input id="file_upload" type="file" style="display: none;" multiple accept=".xopp,*">
+        <form id="file-form" name="file-form">
+            <div id="output-container">
+                <label for="output-name">File Output's Name: </label>
+                <input type="text" name="output-name" id="output-name">
             </div>
-        </div>
+            <div id="file-container" data-files="0" data-hover="false" for="file-form">
+                <div id="file-extra">
+                    <span id="file_copy" class="material-symbols-outlined">file_copy</span>
+                    <div id="file_add" class="material-symbols-outlined no-select">add</div>
+                    <input id="file_upload" type="file" style="display: none;" multiple accept=".xopp,*">
+                </div>
+            </div>
+            <button id="merge-button" type="button">merge</button>
+        </form>
     </main>
 </body>
+
 </html>

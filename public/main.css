@@ -39,7 +39,7 @@ main {
     --dark-color: rgba(86, 51, 16, 0.6);
     --bottom-color: rgba(129, 77, 24, 0.2);
     width: 100%;
-    height: 75%;
+    flex-grow: 1;
     background-color: var(--light-color);
     border-radius: var(--radius);
     z-index: 0;
@@ -48,7 +48,7 @@ main {
     overflow-x: hidden;
     overflow-y: auto;
     scroll-behavior: smooth;
-    margin-bottom: 5%;
+    margin-bottom: 2rem;
 }
 
 #file-container::before {
@@ -222,4 +222,51 @@ main {
 #file-container > .file.removing {
     pointer-events: none;
     animation: removing var(--duration);
+}
+
+#file-form {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5%;
+}
+
+#output-container {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+#output-container > label {
+    margin-bottom: 0;
+    margin-left: 10px;
+    font-size: 1.7rem;
+}
+
+#output-name {
+    border-radius: 5px;
+    margin-bottom: 0;
+}
+
+#merge-button {
+    width: 20%;
+    color: #fff;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    background-color: #4e9af1;
+    border: 0.16em solid rgba(255, 255, 255, 0);
+    border-radius: 5px;
+    margin-bottom: 0;
+    align-self: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+#merge-button:hover {
+    border-color: rgba(255, 255, 255, 1);
 }
