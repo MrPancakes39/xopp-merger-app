@@ -49,10 +49,7 @@ window.onload = function () {
     });
 
     $.on(picker, "change", (event) => {
-        let { files } = event.target;
-        for (let i = 0; i < files.length; i++) {
-            addFile(files[i]);
-        }
+        [...event.target.files].forEach((file) => addFile(file));
     });
 
     // if we upload via drag and drop
@@ -73,10 +70,7 @@ window.onload = function () {
     $.on(container, "drop", (event) => {
         event.preventDefault();
         $.attr(container, "data-hover", "false");
-        let { files } = event.dataTransfer;
-        for (let i = 0; i < files.length; i++) {
-            addFile(files[i]);
-        }
+        [...event.dataTransfer.files].forEach((file) => addFile(file));
     });
 };
 
@@ -290,9 +284,7 @@ function setupListEltEvent(fileElt) {
 }
 
 function sortList() {
-    let sorted_uuids = Array.from($.all(".file")).map((f) =>
-        $.attr(f, "data-uuid")
-    );
+    let sorted_uuids = [...$.all(".file")].map((f) => $.attr(f, "data-uuid"));
     // for safety
     assert(sorted_uuids.length == FILE_LIST.length, {
         sorted_uuids,
