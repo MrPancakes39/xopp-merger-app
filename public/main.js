@@ -208,9 +208,7 @@ function setupListEltEvent(fileElt) {
             $.css(elt, "left", `${pos.left}px`);
             $.attr(elt, "data-hold", "true");
         } else {
-            $.css(elt, "position", "");
-            $.css(elt, "top", "");
-            $.css(elt, "left", "");
+            elt.removeAttribute("style");
             $.attr(elt, "data-hold", "false");
         }
     }
