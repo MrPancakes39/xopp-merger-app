@@ -274,6 +274,12 @@ function setupListEltEvent(fileElt) {
             // decrease number of files
             let listLen = +$.attr(container, "data-files");
             $.attr(container, "data-files", listLen - 1);
+
+            // delete from FILE_LIST
+            let uuid = $.attr(fileElt, "data-uuid");
+            let index = FILE_LIST.findIndex((f) => f.uuid === uuid);
+            assert(index != -1);
+            FILE_LIST.splice(index, 1);
         }, duration);
     });
 }
