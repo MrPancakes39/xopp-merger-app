@@ -133,6 +133,7 @@ main {
 }
 
 #file-container > .file {
+    --duration: 300ms;
     width: 100%;
     height: 50px;
     z-index: 0;
@@ -220,5 +221,5 @@ main {
 
 #file-container > .file.removing {
     pointer-events: none;
-    animation: removing 400ms;
+    animation: removing var(--duration);
 }

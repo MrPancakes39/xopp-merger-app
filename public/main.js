@@ -214,6 +214,8 @@ function setupListEltEvent(fileElt) {
         if ($.attr(fileElt, "data-hold") == "true") event.preventDefault();
     });
 
+    const duration = parseInt($.prop(fileElt, "--duration"));
+
     $.on($.find(fileElt, ".remove"), "click", () => {
         // play the animation
         fileElt.classList.add("removing");
@@ -222,6 +224,6 @@ function setupListEltEvent(fileElt) {
             // decrease number of files
             let listLen = +$.attr(container, "data-files");
             $.attr(container, "data-files", listLen - 1);
-        }, 400);
+        }, duration);
     });
 }
