@@ -75,6 +75,8 @@ window.onload = function () {
         $.attr(container, "data-hover", "false");
         [...event.dataTransfer.files].forEach((file) => addFile(file));
     });
+
+    $.on($.one("#merge-button"), "click", mergeFiles);
 };
 
 function addFile(file) {
@@ -323,4 +325,33 @@ function getFileName() {
     } else filename = input;
 
     return `${filename}.${extension}`;
+}
+
+async function mergeFiles(event) {
+    event.preventDefault();
+
+    if (FILE_LIST.length < 2) {
+        alert("You need to upload 2 or more files.");
+        return;
+    }
+
+    sortList();
+
+    const formData = new FormData();
+    for (let fobj of FILE_LIST) {
+        const { file } = fobj;
+        formData.append("files[]", file, file.name);
+    }
+    formData.append("filename", getFileName());
+
+    const res = await fetch("/api/merge", {
+        method: "POST",
+        body: formData,
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        mode: "cors",
+    });
+    const status = await res.json();
+    console.log(status);
 }
