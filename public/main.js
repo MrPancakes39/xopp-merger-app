@@ -41,6 +41,7 @@ const assert = (condition, ...data) => {
 const FILE_LIST = [];
 
 window.onload = function () {
+    // if we upload via add sign
     const picker = $.one("#file_upload");
 
     $.on($.one("#file_add"), "click", (event) => {
@@ -50,35 +51,39 @@ window.onload = function () {
     $.on(picker, "change", (event) => {
         let { files } = event.target;
         for (let i = 0; i < files.length; i++) {
-            let uuid = crypto.randomUUID();
-            addToList(files[i].name, uuid);
-            FILE_LIST.push({ file: files[i], uuid });
+            addFile(files[i]);
+        }
+    });
+
+    // if we upload via drag and drop
+    const container = $.one("#file-container");
+
+    $.on(document.body, "dragover", (event) => {
+        event.preventDefault();
+        $.attr(container, "data-hover", "true");
+    });
+
+    ["dragend", "dragleave", "drop"].forEach((e) => {
+        $.on(document.body, e, (event) => {
+            event.preventDefault();
+            $.attr(container, "data-hover", "false");
+        });
+    });
+
+    $.on(container, "drop", (event) => {
+        event.preventDefault();
+        $.attr(container, "data-hover", "false");
+        let { files } = event.dataTransfer;
+        for (let i = 0; i < files.length; i++) {
+            addFile(files[i]);
         }
     });
 };
 
-function sortList() {
-    let sorted_uuids = Array.from($.all(".file")).map((f) =>
-        $.attr(f, "data-uuid")
-    );
-    // for safety
-    assert(sorted_uuids.length == FILE_LIST.length, {
-        sorted_uuids,
-        FILE_LIST,
-    });
-    // sort the list
-    for (let i = 0; i < FILE_LIST.length; i++) {
-        // if UUID isn't correct
-        if (FILE_LIST[i].uuid != sorted_uuids[i]) {
-            // search for right file
-            for (let j = i + 1; j < FILE_LIST.length; j++) {
-                // and swap it so it becomes in correct place
-                if (FILE_LIST[j].uuid == sorted_uuids[i]) {
-                    [FILE_LIST[i], FILE_LIST[j]] = [FILE_LIST[j], FILE_LIST[i]];
-                }
-            }
-        }
-    }
+function addFile(file) {
+    let uuid = crypto.randomUUID();
+    addToList(file.name, uuid);
+    FILE_LIST.push({ file, uuid });
 }
 
 function addToList(name, uuid) {
@@ -282,4 +287,28 @@ function setupListEltEvent(fileElt) {
             FILE_LIST.splice(index, 1);
         }, duration);
     });
+}
+
+function sortList() {
+    let sorted_uuids = Array.from($.all(".file")).map((f) =>
+        $.attr(f, "data-uuid")
+    );
+    // for safety
+    assert(sorted_uuids.length == FILE_LIST.length, {
+        sorted_uuids,
+        FILE_LIST,
+    });
+    // sort the list
+    for (let i = 0; i < FILE_LIST.length; i++) {
+        // if UUID isn't correct
+        if (FILE_LIST[i].uuid != sorted_uuids[i]) {
+            // search for right file
+            for (let j = i + 1; j < FILE_LIST.length; j++) {
+                // and swap it so it becomes in correct place
+                if (FILE_LIST[j].uuid == sorted_uuids[i]) {
+                    [FILE_LIST[i], FILE_LIST[j]] = [FILE_LIST[j], FILE_LIST[i]];
+                }
+            }
+        }
+    }
 }
