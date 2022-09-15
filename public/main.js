@@ -33,7 +33,7 @@ window.$ = {
 };
 
 window.onload = function () {
-    for (let i = 1; i <= 10; i++) {
+    for (let i = 1; i <= 11; i++) {
         addToList(`File ${i}`);
     }
 };
@@ -171,6 +171,10 @@ function setupListEltEvent(fileElt) {
         } else {
             maxBottom = $.pos(lastNotHeld).top + fileHeight + header / 2;
         }
+        // if it's not overflown then we use the container reference.
+        let containerBottom = containerHeight - fileHeight + header / 2;
+        maxBottom = Math.max(maxBottom, containerBottom);
+
         eltY = Math.min(eltY, maxBottom);
 
         $.css(elt, "top", `${eltY}px`);
