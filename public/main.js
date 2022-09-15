@@ -32,6 +32,12 @@ window.$ = {
     },
 };
 
+const assert = (condition, ...data) => {
+    if (condition) return;
+    console.assert(condition, ...data);
+    throw new Error("Assertion Failed!");
+};
+
 const FILE_LIST = [];
 
 window.onload = function () {
