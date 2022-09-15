@@ -184,11 +184,14 @@ function setupListEltEvent(fileElt) {
         // move placeholder down to next element
         const thres = header / 2 + fileHeight / 10;
         if (changeY > thres) {
-            let nextElt = placeholder.nextElementSibling.nextElementSibling;
+            let nextElt = fileElt.nextElementSibling;
             if (nextElt) container.insertBefore(nextElt, placeholder);
         } else if (changeY < -thres) {
             let prevElt = placeholder.previousElementSibling;
-            if (prevElt) container.insertBefore(placeholder, prevElt);
+            if (prevElt) {
+                container.insertBefore(placeholder, prevElt);
+                container.insertBefore(fileElt, prevElt);
+            }
         }
     }
 
