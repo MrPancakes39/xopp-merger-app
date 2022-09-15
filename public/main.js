@@ -63,7 +63,10 @@ window.onload = function () {
     ["dragend", "dragleave", "drop"].forEach((e) => {
         $.on(document.body, e, (event) => {
             event.preventDefault();
-            $.attr(container, "data-hover", "false");
+            // fix for chrome
+            if (!event.fromElement) {
+                $.attr(container, "data-hover", "false");
+            }
         });
     });
 
