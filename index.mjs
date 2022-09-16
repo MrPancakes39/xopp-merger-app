@@ -11,11 +11,15 @@ app.use(express.static("public"));
 app.use(express.json());
 
 app.post("/api/merge", (req, res) => {
-    mergeFiles(req.body);
-    res.send("OK");
+    const file = mergeFiles(req.body);
+    res.setHeader("Content-Length", file.length);
+    res.setHeader("Content-Type", "application/x-xopp");
+    res.setHeader(
+        "Content-Disposition",
+        `attachment; filename=${req.body.output}`
+    );
+    res.end(file);
 });
-
-import fs from "node:fs";
 
 // gzip library
 import zlib from "node:zlib";
@@ -53,6 +57,5 @@ function mergeFiles(data) {
     // build xml
     const outputXML = xmlBuilder.build(outputJSON);
     // compress the data
-    const outputBuffer = zlib.gzipSync(outputXML);
-    fs.writeFileSync(data.output, outputBuffer);
+    return zlib.gzipSync(outputXML);
 }
