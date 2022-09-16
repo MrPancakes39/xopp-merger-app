@@ -327,6 +327,15 @@ function getFileName() {
     return `${filename}.${extension}`;
 }
 
+function fileToB64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(reader.error);
+    });
+}
+
 async function mergeFiles(event) {
     event.preventDefault();
 
@@ -337,21 +346,27 @@ async function mergeFiles(event) {
 
     sortList();
 
-    const formData = new FormData();
+    const data = {
+        files: [],
+        output: getFileName(),
+    };
+
     for (let fobj of FILE_LIST) {
         const { file } = fobj;
-        formData.append("files[]", file, file.name);
+        data.files.push({
+            filename: file.name,
+            file: await fileToB64(file),
+        });
     }
-    formData.append("filename", getFileName());
 
     const res = await fetch("/api/merge", {
         method: "POST",
-        body: formData,
+        body: JSON.stringify(data),
         headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
+            "Content-Type": "application/json",
         },
         mode: "cors",
     });
-    const status = await res.json();
-    console.log(status);
+    const msg = await res.text();
+    console.log(msg);
 }
