@@ -367,6 +367,34 @@ async function mergeFiles(event) {
         },
         mode: "cors",
     });
-    const msg = await res.text();
-    console.log(msg);
+    if (res.status == 200) {
+        downloadFile(await res.blob(), data.output);
+    }
+}
+
+function downloadFile(blob, filename) {
+    const link = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = link;
+    a.download = filename;
+
+    // Firefox requires the link to be added to the DOM before click()
+    a.onclick = (e) => {
+        document.body.removeChild(e.target); // destroyClickedElement
+        e.stopPropagation();
+    };
+
+    a.style.display = "none";
+    document.body.appendChild(a);
+
+    // Safari will open this file in the same page as a confusing Blob.
+    if (this._isSafari) {
+        let aText = "Hello, Safari user! To download this file...\n";
+        aText += "1. Go to File --> Save As.\n";
+        aText += '2. Choose "Page Source" as the Format.\n';
+        aText += `3. Name it with this extension: ."${fx[1]}"`;
+        alert(aText);
+    }
+    a.click();
 }
