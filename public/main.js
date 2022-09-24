@@ -385,6 +385,15 @@ async function mergeFiles(event) {
             downloadFile(await res.blob(), data.output);
             document.body.removeChild(modal);
         });
+    } else if (res.status == 400) {
+        const { error } = await res.json();
+        createModal({
+            type: "error",
+            title: "Error",
+            content: `Reason: ${error.reason}\nDetails: ${error.more_info}`,
+        });
+    } else {
+        console.error("Unreachable!");
     }
 }
 
