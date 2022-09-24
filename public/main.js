@@ -340,7 +340,11 @@ async function mergeFiles(event) {
     event.preventDefault();
 
     if (FILE_LIST.length < 2) {
-        alert("You need to upload 2 or more files.");
+        createModal({
+            type: "ok",
+            title: "Requirement",
+            content: "You need to upload 2 or more files.",
+        });
         return;
     }
 
@@ -368,7 +372,30 @@ async function mergeFiles(event) {
         mode: "cors",
     });
     if (res.status == 200) {
-        downloadFile(await res.blob(), data.output);
+        const size = humanizeSize(res.headers.get("Content-Length"));
+        const modal = createModal({
+            type: "download",
+            title: "Merged File",
+            content: {
+                filename: data.output,
+                size: size,
+            },
+        });
+        $.on($.find(modal, "#OK"), "click", async () => {
+            downloadFile(await res.blob(), data.output);
+            document.body.removeChild(modal);
+        });
+    } else if (res.status == 400) {
+        const { error } = await res.json();
+        let content = `Reason: ${error.reason}`;
+        if (error.more_info) content += `\nDetails: ${error.more_info}`;
+        createModal({
+            type: "error",
+            title: "Error",
+            content,
+        });
+    } else {
+        console.error("Unreachable!");
     }
 }
 
@@ -397,4 +424,100 @@ function downloadFile(blob, filename) {
         alert(aText);
     }
     a.click();
+}
+
+const round = (num, place) => {
+    const exp = Math.pow(10, place);
+    return Math.round(num * exp) / exp;
+};
+
+function humanizeSize(fileSize) {
+    const size = parseInt(fileSize);
+    const KB = 1024;
+    const MB = 1024 * KB;
+    let size_mb = size / MB;
+    let size_kb = size / KB;
+    if (Math.floor(size_mb) > 0) {
+        return round(size_mb, 2) + "MB";
+    }
+    if (Math.floor(size_kb) > 0) {
+        return round(size_kb, 2) + "KB";
+    }
+    return fileSize + "B";
+}
+
+function createModal(config) {
+    assert(config, "Missing config.");
+    ["type", "title", "content"].forEach((prop) =>
+        assert(config[prop], `Missing modal ${prop}.`)
+    );
+    assert(
+        config.type === "ok" ||
+            config.type === "download" ||
+            config.type === "error",
+        `${config.type} isn't a valid modal type.`
+    );
+
+    let content;
+    switch (config.type) {
+        case "error":
+            content = $.make(`
+            <div class="error">
+                <p>An error occured:</p>
+                <code>${config.content.toString()}</code>
+            </div>`);
+            break;
+
+        case "download":
+            content = $.make(`
+            <div class="file">
+                <span class="name">${config.content.filename.toString()}</span>
+                <span class="size">${config.content.size.toString()}</span>
+            </div>`);
+            break;
+
+        default:
+            content = $.make(`<p>${config.content.toString()}</p>`);
+            break;
+    }
+
+    const modal = $.make(`
+    <div class="xpp_modal-container" id="modal">
+        <div class="background"></div>
+        <div class="xpp_modal" data-type="${config.type}">
+            <div class="header">
+                <span class="title">${config.title.toString()}</span>
+                <span id="modal_close" class="no-select">close</span>
+                <hr>
+            </div>
+            <div class="content"></div>
+            <div class="footer">
+                <hr>
+                <button id="OK" type="button" class="primary-btn">OK</button>
+            </div>
+        </div>
+    </div>
+    `);
+
+    $.find(modal, ".content").append(content);
+    if (config.type == "download") {
+        $.find(modal, "#OK").innerText = "Download";
+    }
+
+    setupModalEvent(modal, config.type);
+
+    $.all("#modal").forEach((modal) => document.body.removeChild(modal));
+    document.body.append(modal);
+
+    return modal;
+}
+
+function setupModalEvent(modal, type) {
+    $.on($.find(modal, "#modal_close"), "click", () =>
+        document.body.removeChild(modal)
+    );
+    if (type !== "download")
+        $.on($.find(modal, "#OK"), "click", () =>
+            document.body.removeChild(modal)
+        );
 }

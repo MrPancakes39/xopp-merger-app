@@ -29,6 +29,8 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.18.1",
-    "fast-xml-parser": "^4.0.10"
+    "fast-xml-parser": "^4.0.10",
+    "lodash.isplainobject": "^4.0.6",
+    "lodash.isstring": "^4.0.1"
   }
 }
