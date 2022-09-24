@@ -1,3 +1,10 @@
+:root {
+    --light-color: #faf0e6;
+    --medium-color: #f6e3d0;
+    --dark-color: rgba(86, 51, 16, 0.6);
+    --bottom-color: rgba(129, 77, 24, 0.2);
+}
+
 html,
 body {
     margin: 0;
@@ -34,10 +41,6 @@ main {
 #file-container {
     --radius: 10px;
     --header-height: 44px;
-    --light-color: #faf0e6;
-    --medium-color: #f6e3d0;
-    --dark-color: rgba(86, 51, 16, 0.6);
-    --bottom-color: rgba(129, 77, 24, 0.2);
     width: 100%;
     flex-grow: 1;
     background-color: var(--light-color);
