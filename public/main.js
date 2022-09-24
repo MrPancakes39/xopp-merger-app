@@ -457,6 +457,18 @@ function createModal(config) {
         $.find(modal, "#OK").innerText = "Download";
     }
 
+    setupModalEvent(modal, config.type);
+
     $.all("#modal").forEach((modal) => document.body.removeChild(modal));
     document.body.append(modal);
+}
+
+function setupModalEvent(modal, type) {
+    $.on($.find(modal, "#modal_close"), "click", () =>
+        document.body.removeChild(modal)
+    );
+    if (type !== "download")
+        $.on($.find(modal, "#OK"), "click", () =>
+            document.body.removeChild(modal)
+        );
 }
