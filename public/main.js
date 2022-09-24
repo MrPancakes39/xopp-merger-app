@@ -371,8 +371,8 @@ async function mergeFiles(event) {
         },
         mode: "cors",
     });
-    const size = res.headers.get("Content-Length");
     if (res.status == 200) {
+        const size = humanizeSize(res.headers.get("Content-Length"));
         const modal = createModal({
             type: "download",
             title: "Merged File",
@@ -412,6 +412,26 @@ function downloadFile(blob, filename) {
         alert(aText);
     }
     a.click();
+}
+
+const round = (num, place) => {
+    const exp = Math.pow(10, place);
+    return Math.round(num * exp) / exp;
+};
+
+function humanizeSize(fileSize) {
+    const size = parseInt(fileSize);
+    const KB = 1024;
+    const MB = 1024 * KB;
+    let size_mb = size / MB;
+    let size_kb = size / KB;
+    if (Math.floor(size_mb) > 0) {
+        return round(size_mb, 2) + "MB";
+    }
+    if (Math.floor(size_kb) > 0) {
+        return round(size_kb, 2) + "KB";
+    }
+    return fileSize + "B";
 }
 
 function createModal(config) {
