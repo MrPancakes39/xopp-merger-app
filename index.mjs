@@ -26,6 +26,7 @@ app.post("/api/merge", (req, res) => {
         );
         res.end(file);
     } else {
-        res.status(400).json({ error: result.error });
+        console.error(result.error);
+        res.status(400).json({ error: result.error.reason });
     }
 });

@@ -15,19 +15,40 @@ import Result from "./result-type.mjs";
 
 function mergeFiles(data) {
     if (!validFormat(data))
-        return Result("error", "The data is not in a valid format.");
+        return Result("error", {
+            reason: "The data is not in a valid format.",
+        });
 
     const xmlParser = new XMLParser(xml_options);
     const xmlBuilder = new XMLBuilder(xml_options);
 
-    const jsonFiles = data.files.map((obj) => {
+    const jsonFiles = [];
+    for (let i = 0; i < data.files.length; i++) {
+        const obj = data.files[i];
         // strip base64 header and convert to a buffer
-        let buffer = new Buffer(obj.file.slice(31), "base64");
-        // decompress the file
-        let xmlData = zlib.gunzipSync(buffer);
+        let buffer = Buffer.from(obj.file.slice(31), "base64");
+
+        let xmlData;
+        try {
+            // decompress the file
+            xmlData = zlib.gunzipSync(buffer);
+        } catch {
+            return Result("error", {
+                reason: `File '${obj.filename}' is not a valid xopp file.`,
+                more_info: "Couldn't decompress the xopp file.",
+            });
+        }
+
         // parse xml as json
-        return xmlParser.parse(xmlData);
-    });
+        const jsonData = xmlParser.parse(xmlData);
+        if (jsonData.length === 0)
+            return Result("error", {
+                reason: `File '${obj.filename}' is not a valid xopp file.`,
+                more_info: "Couldn't parse the xml file.",
+            });
+
+        jsonFiles.push(jsonData);
+    }
 
     // we will modify first file and use it as output
     const outputJSON = jsonFiles[0];
