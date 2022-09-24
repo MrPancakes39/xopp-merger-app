@@ -356,6 +356,21 @@ main {
     margin-bottom: 1rem;
 }
 
+.xpp_modal > .content > .file {
+    width: 60%;
+    display: flex;
+    flex-direction: row;
+    background: #fff;
+    margin: 0 auto 1rem auto;
+    padding: 5px;
+    border-radius: 2px;
+}
+
+.xpp_modal > .content > .file > .size {
+    color: rgba(0, 0, 0, 0.5);
+    margin-left: auto;
+}
+
 .xpp_modal > .footer {
     display: flex;
     flex-direction: column;
@@ -372,4 +387,8 @@ main {
     width: 20%;
     margin-bottom: 0;
     align-self: end;
+}
+
+.xpp_modal[data-type="download"] > .footer > button {
+    width: 30%;
 }
