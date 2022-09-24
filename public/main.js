@@ -387,10 +387,12 @@ async function mergeFiles(event) {
         });
     } else if (res.status == 400) {
         const { error } = await res.json();
+        let content = `Reason: ${error.reason}`;
+        if (error.more_info) content += `\nDetails: ${error.more_info}`;
         createModal({
             type: "error",
             title: "Error",
-            content: `Reason: ${error.reason}\nDetails: ${error.more_info}`,
+            content,
         });
     } else {
         console.error("Unreachable!");
