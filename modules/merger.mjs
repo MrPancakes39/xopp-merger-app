@@ -14,10 +14,8 @@ import validFormat from "./validate.mjs";
 import Result from "./result-type.mjs";
 
 function mergeFiles(data) {
-    if (!validFormat(data)) {
-        console.log("not valid");
+    if (!validFormat(data))
         return Result("error", "The data is not in a valid format.");
-    }
 
     const xmlParser = new XMLParser(xml_options);
     const xmlBuilder = new XMLBuilder(xml_options);
@@ -42,7 +40,7 @@ function mergeFiles(data) {
     // build xml
     const outputXML = xmlBuilder.build(outputJSON);
     // compress the data
-    return zlib.gzipSync(outputXML);
+    return Result("ok", zlib.gzipSync(outputXML));
 }
 
 export default mergeFiles;
