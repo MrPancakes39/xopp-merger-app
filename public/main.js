@@ -342,7 +342,7 @@ async function mergeFiles(event) {
     if (FILE_LIST.length < 2) {
         createModal({
             type: "ok",
-            title: "Requirements",
+            title: "Requirement",
             content: "You need to upload 2 or more files.",
         });
         return;
@@ -383,6 +383,7 @@ async function mergeFiles(event) {
         });
         $.on($.find(modal, "#OK"), "click", async () => {
             downloadFile(await res.blob(), data.output);
+            document.body.removeChild(modal);
         });
     }
 }
