@@ -3,6 +3,8 @@
 import express from "express";
 import cors from "cors";
 
+import mergeFiles from "./modules/merger.mjs";
+
 const app = express();
 const PORT = process.env.PORT || 3500;
 
@@ -12,15 +14,18 @@ app.use(express.static("public"));
 
 app.listen(PORT, () => console.log(`Listening on: http://localhost:${PORT}`));
 
-import mergeFiles from "./modules/merger.mjs";
-
 app.post("/api/merge", (req, res) => {
-    const file = mergeFiles(req.body);
-    res.setHeader("Content-Length", file.length);
-    res.setHeader("Content-Type", "application/x-xopp");
-    res.setHeader(
-        "Content-Disposition",
-        `attachment; filename=${req.body.output}`
-    );
-    res.end(file);
+    const result = mergeFiles(req.body);
+    if (result.ok) {
+        const file = result.value;
+        res.setHeader("Content-Length", file.length);
+        res.setHeader("Content-Type", "application/x-xopp");
+        res.setHeader(
+            "Content-Disposition",
+            `attachment; filename=${req.body.output}`
+        );
+        res.end(file);
+    } else {
+        res.status(400).json({ error: result.error });
+    }
 });

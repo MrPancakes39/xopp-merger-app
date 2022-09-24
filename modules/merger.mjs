@@ -10,7 +10,15 @@ const xml_options = {
     preserveOrder: true,
 };
 
+import validFormat from "./validate.mjs";
+import Result from "./result-type.mjs";
+
 function mergeFiles(data) {
+    if (!validFormat(data)) {
+        console.log("not valid");
+        return Result("error", "The data is not in a valid format.");
+    }
+
     const xmlParser = new XMLParser(xml_options);
     const xmlBuilder = new XMLBuilder(xml_options);
 
