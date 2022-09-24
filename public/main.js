@@ -340,7 +340,11 @@ async function mergeFiles(event) {
     event.preventDefault();
 
     if (FILE_LIST.length < 2) {
-        alert("You need to upload 2 or more files.");
+        createModal({
+            type: "ok",
+            title: "Requirements",
+            content: "You need to upload 2 or more files.",
+        });
         return;
     }
 
