@@ -28,4 +28,49 @@ function validFormat(data) {
     return true;
 }
 
-export default validFormat;
+function validFile(jsonFile) {
+    // [ header, body ]
+    if (!Array.isArray(jsonFile) || jsonFile.length !== 2) return false;
+    // header = { "?xml": [...], ":@": {...} }
+    const header = jsonFile[0];
+    if (
+        !isPlainObject(header) ||
+        !Array.isArray(header["?xml"]) ||
+        !isPlainObject(header[":@"])
+    ) {
+        return false;
+    }
+    // body = { "xournal": [...], ":@": {...} }
+    const body = jsonFile[1];
+    if (!isPlainObject(body)) return false;
+    // body[":@"] = { "@_creator": string, ...}
+    if (
+        !isPlainObject(body[":@"]) ||
+        !isString(body[":@"]["@_creator"]) ||
+        !body[":@"]["@_creator"].startsWith("Xournal")
+    ) {
+        return false;
+    }
+    /* body["xournal"] = [
+        {title: ...},
+        {preview: ...},
+        {page: [...], ":@": {...}},
+        {page: [...], ":@": {...}},
+        ...
+    ] */
+    if (!Array.isArray(body["xournal"]) || body["xournal"].length < 3) {
+        return false;
+    }
+    if (
+        !body["xournal"][0].title ||
+        !body["xournal"][1].preview ||
+        !body["xournal"][2].page ||
+        !Array.isArray(body["xournal"][2].page)
+    ) {
+        return false;
+    }
+    // if valid file.
+    return true;
+}
+
+export { validFormat, validFile };

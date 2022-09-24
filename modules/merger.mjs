@@ -10,7 +10,7 @@ const xml_options = {
     preserveOrder: true,
 };
 
-import validFormat from "./validate.mjs";
+import { validFormat, validFile } from "./validate.mjs";
 import Result from "./result-type.mjs";
 
 function mergeFiles(data) {
@@ -45,6 +45,11 @@ function mergeFiles(data) {
             return Result("error", {
                 reason: `File '${obj.filename}' is not a valid xopp file.`,
                 more_info: "Couldn't parse the xml file.",
+            });
+        if (!validFile(jsonData))
+            return Result("error", {
+                reason: `File '${obj.filename}' is not a valid xopp file.`,
+                more_info: "Doesn't satisfy the valid format.",
             });
 
         jsonFiles.push(jsonData);
