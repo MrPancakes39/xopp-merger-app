@@ -14,10 +14,8 @@ import { validFormat, validFile } from "./validate.mjs";
 import Result from "./result-type.mjs";
 
 function mergeFiles(data) {
-    if (!validFormat(data))
-        return Result("error", {
-            reason: "The data is not in a valid format.",
-        });
+    const formatResult = validFormat(data);
+    if (!formatResult.ok) return formatResult;
 
     const xmlParser = new XMLParser(xml_options);
     const xmlBuilder = new XMLBuilder(xml_options);

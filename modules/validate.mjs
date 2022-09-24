@@ -1,31 +1,45 @@
 import isPlainObject from "lodash.isplainobject";
 import isString from "lodash.isstring";
+import Result from "./result-type.mjs";
+
+const formatError = (file) =>
+    Result("error", {
+        reason: "The data is not in a valid format.",
+        ...(file ? file : {}),
+    });
 
 function validFormat(data) {
     // data = { output: string, files: fileObj[] }
-    if (!isPlainObject(data)) return false;
+    if (!isPlainObject(data)) return formatError();
     if (!isString(data.output) || !Array.isArray(data.files)) {
-        return false;
+        return formatError();
     }
     // need at least 2 files to merge
-    if (data.files.length < 2) return false;
+    if (data.files.length < 2)
+        return formatError({
+            more_info: `FileList has less than 2 files.`,
+        });
     // files = [ fileObj, ...]
     for (let i = 0; i < data.files.length; i++) {
         // fileObj = { filename: string, file: string  }
         const fileObj = data.files[i];
         if (!isPlainObject(fileObj)) return false;
         if (!isString(fileObj.filename) || fileObj.filename === "")
-            return false;
+            return formatError({
+                more_info: `File '${fileObj.filename}' doesn't have a valid name.`,
+            });
         // fileObj.file is a base64 encoded file that needs to start with this header.
         if (
             !isString(fileObj.file) ||
             !fileObj.file.startsWith("data:application/x-xopp;base64,")
         ) {
-            return false;
+            return formatError({
+                more_info: `File '${fileObj.filename}' doesn't have a valid header.`,
+            });
         }
     }
     // if valid format.
-    return true;
+    return Result("ok", true);
 }
 
 function validFile(jsonFile) {
