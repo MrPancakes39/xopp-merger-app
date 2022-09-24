@@ -371,8 +371,19 @@ async function mergeFiles(event) {
         },
         mode: "cors",
     });
+    const size = res.headers.get("Content-Length");
     if (res.status == 200) {
-        downloadFile(await res.blob(), data.output);
+        const modal = createModal({
+            type: "download",
+            title: "Merged File",
+            content: {
+                filename: data.output,
+                size: size,
+            },
+        });
+        $.on($.find(modal, "#OK"), "click", async () => {
+            downloadFile(await res.blob(), data.output);
+        });
     }
 }
 
@@ -465,6 +476,8 @@ function createModal(config) {
 
     $.all("#modal").forEach((modal) => document.body.removeChild(modal));
     document.body.append(modal);
+
+    return modal;
 }
 
 function setupModalEvent(modal, type) {
