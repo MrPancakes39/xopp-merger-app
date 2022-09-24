@@ -398,3 +398,65 @@ function downloadFile(blob, filename) {
     }
     a.click();
 }
+
+function createModal(config) {
+    assert(config, "Missing config.");
+    ["type", "title", "content"].forEach((prop) =>
+        assert(config[prop], `Missing modal ${prop}.`)
+    );
+    assert(
+        config.type === "ok" ||
+            config.type === "download" ||
+            config.type === "error",
+        `${config.type} isn't a valid modal type.`
+    );
+
+    let content;
+    switch (config.type) {
+        case "error":
+            content = $.make(`
+            <div class="error">
+                <p>An error occured:</p>
+                <code>${config.content.toString()}</code>
+            </div>`);
+            break;
+
+        case "download":
+            content = $.make(`
+            <div class="file">
+                <span class="name">${config.content.filename.toString()}</span>
+                <span class="size">${config.content.size.toString()}</span>
+            </div>`);
+            break;
+
+        default:
+            content = $.make(`<p>${config.content.toString()}</p>`);
+            break;
+    }
+
+    const modal = $.make(`
+    <div class="xpp_modal-container" id="modal">
+        <div class="background"></div>
+        <div class="xpp_modal" data-type="${config.type}">
+            <div class="header">
+                <span class="title">${config.title.toString()}</span>
+                <span id="modal_close" class="no-select">close</span>
+                <hr>
+            </div>
+            <div class="content"></div>
+            <div class="footer">
+                <hr>
+                <button id="OK" type="button" class="primary-btn">OK</button>
+            </div>
+        </div>
+    </div>
+    `);
+
+    $.find(modal, ".content").append(content);
+    if (config.type == "download") {
+        $.find(modal, "#OK").innerText = "Download";
+    }
+
+    $.all("#modal").forEach((modal) => document.body.removeChild(modal));
+    document.body.append(modal);
+}
