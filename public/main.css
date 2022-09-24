@@ -352,7 +352,7 @@ main {
     overflow: auto;
 }
 
-.xpp_modal > .content > p {
+.xpp_modal > .content > * {
     margin-bottom: 1rem;
 }
 
@@ -369,6 +369,15 @@ main {
 .xpp_modal > .content > .file > .size {
     color: rgba(0, 0, 0, 0.5);
     margin-left: auto;
+}
+
+.xpp_modal > .content > .error > p {
+    margin-bottom: 0.5rem;
+}
+
+.xpp_modal > .content > .error > code {
+    display: flex;
+    white-space: pre-line;
 }
 
 .xpp_modal > .footer {
