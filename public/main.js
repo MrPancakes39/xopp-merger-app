@@ -395,7 +395,12 @@ async function mergeFiles(event) {
             content,
         });
     } else {
-        console.error("Unreachable!");
+        console.error("Unexpected Error");
+        createModal({
+            type: "error",
+            title: "Unexpected Error",
+            content: `${res.status} ${res.statusText}`,
+        });
     }
 }
 
