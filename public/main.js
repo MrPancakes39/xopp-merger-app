@@ -331,7 +331,12 @@ function fileToB64(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
+        reader.onload = () => {
+            // Fix for Windows
+            const current_header = /data:application.+;base64,/g;
+            const correct_header = "data:application/x-xopp;base64,";
+            resolve(reader.result.replace(current_header, correct_header));
+        };
         reader.onerror = () => reject(reader.error);
     });
 }
