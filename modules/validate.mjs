@@ -61,7 +61,7 @@ function validFile(jsonFile) {
     if (
         !isPlainObject(body[":@"]) ||
         !isString(body[":@"]["@_creator"]) ||
-        !body[":@"]["@_creator"].startsWith("Xournal")
+        !(body[":@"]["@_creator"].startsWith("xournal") || body[":@"]["@_creator"].startsWith("Xournal"))
     ) {
         return false;
     }
